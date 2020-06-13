@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                                 (MediaQuery.of(context).padding.top +
                                     AppBar().preferredSize.height +
                                     35),
-                            child: viewModel.eventDisplayType != EventDisplayType.LIST
+                            child: viewModel.eventDisplayType == EventDisplayType.LIST
                                 ? _buildEventListWidget(viewModel)
                                 : _buildEventGridWidget(viewModel),
                           )
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           GestureDetector(
-            child: viewModel.eventDisplayType == EventDisplayType.LIST
+            child: viewModel.eventDisplayType != EventDisplayType.LIST
                 ? _buildEventListLogoWidget()
                 : _buildEventGridLogoWidget(),
             onTap: () {

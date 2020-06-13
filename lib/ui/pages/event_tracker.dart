@@ -110,6 +110,7 @@ class _EventTrackerPageState extends State<EventTrackerPage> {
   Widget _buildListEmpty(EventTrackerViewModel viewModel) {
     return Container(
       width: double.infinity,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
