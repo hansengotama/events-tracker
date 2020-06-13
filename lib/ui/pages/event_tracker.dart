@@ -49,6 +49,8 @@ class _EventTrackerPageState extends State<EventTrackerPage> {
               }
             },
             child: Container(
+              width: double.infinity,
+              height: double.infinity,
               child: Column(
                 children: <Widget>[
                   Container(
@@ -89,20 +91,46 @@ class _EventTrackerPageState extends State<EventTrackerPage> {
   }
 
   Widget _buildTextConditionWidget(EventTrackerViewModel viewModel) {
-    if(viewModel.isEdit) return _buildSaveTextWidget(viewModel);
-    else return _buildEditTextWidget(viewModel);
+    if (viewModel.isEdit)
+      return _buildSaveTextWidget(viewModel);
+    else
+      return _buildEditTextWidget(viewModel);
   }
 
   Widget _buildListConditionWidget(EventTrackerViewModel viewModel) {
-    if(viewModel.eventTrackers == null || viewModel.eventTrackers.isEmpty) return _buildListEmpty();
+    if (viewModel.eventTrackers == null || viewModel.eventTrackers.isEmpty)
+      return _buildListEmpty(viewModel);
 
-    if(viewModel.isEdit) return _buildEditTrackEventList(viewModel);
-    else return _buildTrackEventList(viewModel);
+    if (viewModel.isEdit)
+      return _buildEditTrackEventList(viewModel);
+    else
+      return _buildTrackEventList(viewModel);
   }
 
-  Widget _buildListEmpty() {
-    return Center(
-      child: Text("Track Event is empty")
+  Widget _buildListEmpty(EventTrackerViewModel viewModel) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Icon(
+            Icons.info,
+            color: SharedColors.brown,
+            size: 30.0,
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 12.0),
+            child: Text(
+              "Track Event is empty",
+              style: TextStyle(
+                fontFamily: SharedFontFamily.GOTHAM_BOOK,
+                color: SharedColors.brown,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -168,14 +196,16 @@ class _EventTrackerPageState extends State<EventTrackerPage> {
 
   Widget _buildEditTrackEventList(EventTrackerViewModel viewModel) {
     return ReorderableListView(
-      children: List.generate(viewModel.eventTrackers.length, (index) => ListTile(
-        key: UniqueKey(),
-        contentPadding: EdgeInsets.all(0.0),
-        title: _buildEventWidget(viewModel, index, true),
-      )),
+      children: List.generate(
+          viewModel.eventTrackers.length,
+          (index) => ListTile(
+                key: UniqueKey(),
+                contentPadding: EdgeInsets.all(0.0),
+                title: _buildEventWidget(viewModel, index, true),
+              )),
       onReorder: (int oldIndex, int newIndex) {
         setState(() {
-          if(newIndex > oldIndex) newIndex -= 1;
+          if (newIndex > oldIndex) newIndex -= 1;
 
           final TrackEventWithEvent newEventTracker = viewModel.eventTrackers.removeAt(oldIndex);
           viewModel.eventTrackers.insert(newIndex, newEventTracker);
@@ -193,7 +223,9 @@ class _EventTrackerPageState extends State<EventTrackerPage> {
         horizontal: 20.0,
       ),
       child: Material(
-        borderRadius: BorderRadius.circular(10.0,),
+        borderRadius: BorderRadius.circular(
+          10.0,
+        ),
         elevation: 5.0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -202,8 +234,12 @@ class _EventTrackerPageState extends State<EventTrackerPage> {
               children: <Widget>[
                 ClipRRect(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0,),
-                    bottomLeft: Radius.circular(10.0,),
+                    topLeft: Radius.circular(
+                      10.0,
+                    ),
+                    bottomLeft: Radius.circular(
+                      10.0,
+                    ),
                   ),
                   child: Image.asset(
                     "assets/images/events/${viewModel.eventTrackers[index].event.name}/thumbnail.jpg",
@@ -249,7 +285,9 @@ class _EventTrackerPageState extends State<EventTrackerPage> {
                         ),
                         width: 168,
                         child: Text(
-                          viewModel.eventTrackers[index].event.price == 0 ? "FREE" : "${viewModel.eventTrackers[index].event.price}K",
+                          viewModel.eventTrackers[index].event.price == 0
+                              ? "FREE"
+                              : "${viewModel.eventTrackers[index].event.price}K",
                           style: TextStyle(
                             fontFamily: SharedFontFamily.GOTHAM,
                             fontWeight: FontWeight.w700,
@@ -263,21 +301,24 @@ class _EventTrackerPageState extends State<EventTrackerPage> {
                 ),
               ],
             ),
-
-            isEdit ? GestureDetector(
-              child: Container(
-                child: Image.asset(
-                  "assets/images/trash-icon.png",
-                  width: 22,
-                ),
-                margin: EdgeInsets.only(right: 10.0,),
-              ),
-              onTap: () {
-                setState(() {
-                  viewModel.eventTrackers.removeAt(index);
-                });
-              },
-            ) : Container(),
+            isEdit
+                ? GestureDetector(
+                    child: Container(
+                      child: Image.asset(
+                        "assets/images/trash-icon.png",
+                        width: 22,
+                      ),
+                      margin: EdgeInsets.only(
+                        right: 10.0,
+                      ),
+                    ),
+                    onTap: () {
+                      setState(() {
+                        viewModel.eventTrackers.removeAt(index);
+                      });
+                    },
+                  )
+                : Container(),
           ],
         ),
       ),
